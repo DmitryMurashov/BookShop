@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'mainapp/base/base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <ul>
+        {% for book in books %}
+            <li>
+                <a href="{{ book.get_absolute_url }}">{{ book.name }} - {{ book.author.full_name }}</a>
+            </li>
+            {% empty %}
+                <li>Книги не найдены</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

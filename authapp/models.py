@@ -5,5 +5,4 @@ User = get_user_model()
 
 
 class Customer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cart = models.OneToOneField('Cart', on_delete=models.CASCADE)  # ?
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customer")

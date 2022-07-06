@@ -1,4 +1,26 @@
 {% extends 'mainapp/base/base.html' %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/book_detail.css' %}">
+{% endblock %}
 
 {% block content %}
+    <p>{{ book.name }}</p>
+    <p>{{ book.category.name }}</p>
+    <p>
+        <a href="{{ book.author.get_absolute_url }}">{{ book.author.full_name }}</a>
+    </p>
+    <img src="{{ book.image }}" alt="{{ book.name }}" class="book_image">
+    <p>{{ book.price }}</p>
+    <p>{{ book.description }}</p>
+    <button id="show_demo">Показать отрывок</button>
+    <div id="demo_text">
+        {{ book.demo }}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'mainapp/js/book_detail.js' %}"></script>
 {% endblock %}

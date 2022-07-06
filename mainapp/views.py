@@ -14,21 +14,47 @@ class IndexPage(View):
 
 class BooksView(ListView):
     model = Book
+    template_name = "mainapp/books.html"
     context_object_name = "books"
+
+    def get_context_data(self, **kwargs):
+        context = super(BooksView, self).get_context_data(**kwargs)
+        context["page_title"] = "Книги"
+        return context
 
 
 class BookDetailView(DetailView):
-    def get(self, request, *args, **kwargs):
-        book = book_service.get_book(kwargs.get("slug"))
-        return render(request, "mainapp/book_detail.html", context={"book": book})
+    model = Book
+    context_object_name = "book"
+    template_name = "mainapp/book_detail.html"
+    slug_url_kwarg = "slug"
+
+    def get_context_data(self, **kwargs):
+        context = super(BookDetailView, self).get_context_data(**kwargs)
+        context["page_title"] = self.get_object().name
+        return context
 
 
 class AuthorsView(ListView):
     model = Author
-    context_object_name = "Authors"
+    context_object_name = "authors"
+    template_name = "mainapp/authors.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(AuthorsView, self).get_context_data(**kwargs)
+        context["page_title"] = "Авторы"
+        return context
 
 
 class AuthorDetailView(DetailView):
-    def get(self, request, *args, **kwargs):
-        author = book_service.get_book(kwargs.get("slug"))
-        return render(request, "mainapp/book_detail.html", context={"author": author})
+    model = Author
+    context_object_name = "author"
+    template_name = "mainapp/author_detail.html"
+    slug_url_kwarg = "slug"
+
+    def get_context_data(self, **kwargs):
+        context = super(AuthorDetailView, self).get_context_data(**kwargs)
+        author = self.get_object()
+        context["books"] = author.books
+        context["page_title"] = author.full_name
+        return context

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 User = get_user_model()
 
 
@@ -13,6 +14,9 @@ class Book(models.Model):
     image = models.ImageField()
     slug = models.SlugField()
 
+    def get_absolute_url(self):
+        return reverse("book_detail", kwargs={"slug": self.slug})
+
 
 class Author(models.Model):
     name = models.CharField(max_length=50)
@@ -20,6 +24,13 @@ class Author(models.Model):
     biography = models.TextField()
     image = models.ImageField()
     slug = models.SlugField()
+
+    def get_absolute_url(self):
+        return reverse('author_detail', kwargs={'slug': self.slug})
+
+    @property
+    def full_name(self):
+        return f"{self.name} {self.last_name}"
 
 
 class Category(models.Model):
