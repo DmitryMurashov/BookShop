@@ -12,10 +12,16 @@ class Book(models.Model):
     demo = models.TextField(max_length=1000, null=True)
     description = models.TextField(null=True)
     image = models.ImageField()
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=60)
 
     def get_absolute_url(self):
         return reverse("book_detail", kwargs={"slug": self.slug})
+
+    def set_slug(self):
+        self.slug = f"{self.name}+{self.id}"
+
+    def __str__(self):
+        return f"Book[{self.name}]"
 
 
 class Author(models.Model):
@@ -23,16 +29,22 @@ class Author(models.Model):
     last_name = models.CharField(max_length=50)
     biography = models.TextField()
     image = models.ImageField()
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=110)
+
+    def __str__(self):
+        return f"Author[{self.full_name}]"
 
     def get_absolute_url(self):
         return reverse('author_detail', kwargs={'slug': self.slug})
 
+    def set_slug(self) -> None:
+        self.slug = f"{self.name}+{self.last_name}+{self.id}"
+
     @property
-    def full_name(self):
+    def full_name(self) -> str:
         return f"{self.name} {self.last_name}"
 
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=50)

@@ -3,7 +3,9 @@
 {% block content %}
     <ul>
         {% for author in authors %}
-            <li>{{ author.full_name }}</li>
+            <li>
+                <a href="{{ author.get_absolute_url }}">{{ author.full_name }}</a>
+            </li>
             {% empty %}
                 <li>Авторы не найдены</li>
         {% endfor %}
