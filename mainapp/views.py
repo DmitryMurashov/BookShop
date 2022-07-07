@@ -5,6 +5,11 @@ from mainapp.models import Book, Author
 class IndexView(TemplateView):
     template_name = "mainapp/index.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data()
+        context["page_title"] = "Главная"
+        return context
+
 
 class SearchView(TemplateView):
     template_name = "mainapp/search.html"
@@ -13,6 +18,7 @@ class SearchView(TemplateView):
         context = super(SearchView, self).get_context_data()
         context["books"] = Book.objects.all()
         context["authors"] = Author.objects.all()
+        context["page_title"] = "Поиск"
         return context
 
 
