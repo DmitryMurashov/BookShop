@@ -1,0 +1,23 @@
+{% extends 'mainapp/base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <label for="inputSearch">Поиск:</label> <input type="text" id="inputSearch" placeholder="Поиск..">
+    <ul id="elements">
+        {% for book in books %}
+            <li>
+                <a href="{{ book.get_absolute_url }}">{{ book.name }}</a>
+            </li>
+        {% endfor %}
+        {% for author in authors %}
+            <li>
+                <a href="{{ author.get_absolute_url }}">{{ author.full_name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'mainapp/js/search.js' %}"></script>
+{% endblock %}

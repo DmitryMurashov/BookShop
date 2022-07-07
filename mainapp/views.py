@@ -1,15 +1,19 @@
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView
-from django.views import View
+from django.views.generic import DetailView, ListView, TemplateView
 from mainapp.models import Book, Author
-from mainapp.services import book_service
 
 
-class IndexPage(View):
-    def get(self, request, **kwargs):
-        books = Book.objects.all()
-        authors = Author.objects.all()
-        return render(request, "mainapp/index.html", context={"books": books, "authors": authors})
+class IndexView(TemplateView):
+    template_name = "mainapp/index.html"
+
+
+class SearchView(TemplateView):
+    template_name = "mainapp/search.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data()
+        context["books"] = Book.objects.all()
+        context["authors"] = Author.objects.all()
+        return context
 
 
 class BooksView(ListView):

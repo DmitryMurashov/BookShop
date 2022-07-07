@@ -8,12 +8,13 @@
 
 {% block content %}
     <p>{{ book.name }}</p>
-    <p>{{ book.category.name }}</p>
+    <p>Жанр: {{ book.category.name }}</p>
     <p>
-        <a href="{{ book.author.get_absolute_url }}">{{ book.author.full_name }}</a>
+        Автор: <a href="{{ book.author.get_absolute_url }}">{{ book.author.full_name }}</a>
     </p>
     <img src="{{ book.image }}" alt="{{ book.name }}" class="book_image">
-    <p>{{ book.price }}</p>
+    <p>Цена: {{ book.price }}</p>
+    <label>Описание:</label>
     <p>{{ book.description }}</p>
     <button id="show_demo">Показать отрывок</button>
     <div id="demo_text">

@@ -18,7 +18,7 @@ class Book(models.Model):
         return reverse("book_detail", kwargs={"slug": self.slug})
 
     def set_slug(self):
-        self.slug = f"{self.name}+{self.id}"
+        self.slug = f"Book{self.id}"
 
     def __str__(self):
         return f"Book[{self.name}]"
@@ -38,7 +38,7 @@ class Author(models.Model):
         return reverse('author_detail', kwargs={'slug': self.slug})
 
     def set_slug(self) -> None:
-        self.slug = f"{self.name}+{self.last_name}+{self.id}"
+        self.slug = f"Author{self.id}"
 
     @property
     def full_name(self) -> str:
@@ -48,3 +48,9 @@ class Author(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
+
+    def set_slug(self) -> None:
+        self.slug = f"Category{self.id}"
+
+
+
