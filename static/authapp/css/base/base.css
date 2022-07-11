@@ -1,0 +1,15 @@
+.nav-inactive {
+    background: #efefef !important;
+}
+
+.oauth-btn {
+    border-radius: 50%;
+    background: #efefef !important;
+}
+
+.error_text {
+    display: flex !important;
+    justify-content: center !important;
+    background-image: linear-gradient(45deg,#fb6868,#ff3434) !important;
+    color: white !important;
+}

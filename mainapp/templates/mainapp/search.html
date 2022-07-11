@@ -1,20 +1,81 @@
 {% extends 'mainapp/base/base.html' %}
 {% load static %}
 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/search.css' %}">
+{% endblock %}
+
+{% block title %}
+    Поиск
+{% endblock %}
+
 {% block content %}
-    <label for="inputSearch">Поиск:</label> <input type="text" id="inputSearch" placeholder="Поиск..">
-    <ul id="elements">
-        {% for book in books %}
-            <li>
-                <a href="{{ book.get_absolute_url }}">{{ book.name }}</a>
-            </li>
-        {% endfor %}
-        {% for author in authors %}
-            <li>
-                <a href="{{ author.get_absolute_url }}">{{ author.full_name }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+
+    <div class="container mt-4">
+        <hgroup class="mb20">
+            <button class="btn btn-primary mb-2">Фильтры</button>
+            <h1>Резутитаты поиска</h1>
+            {% if results_quantity %}
+                <h2 class="lead">Результаты по запросу <strong>"{{ query }}" ({{ results_quantity }})</strong></h2>
+            {% else %}
+                <h2 class="lead">По запросу <strong> "{{ query }}"</strong> ничего не найдено</h2>
+            {% endif %}
+        </hgroup>
+        {% if results_quantity %}
+            <section class="col-xs-12 col-sm-6 col-md-12">
+                {% for book in books %}
+                    <article class="search-result row">
+                        <div class="col-sm-12 col-md-3">
+                            <a href="#" title="Lorem ipsum">
+                                <img src="{{ book.image }}" alt="Lorem ipsum" class="object-image rounded float-start"/></a>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <ul class="meta-search">
+                                <li><i class="bi bi-person"></i> <span><a href="{{ book.author.get_absolute_url }}">{{ book.author.full_name }}</a></span></li>
+                                <li><i class="bi bi-justify"></i> <span>{{ book.category.name }}</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+                            <h3><a href="#" title="Название" class="text-decoration-none">{{ book.name }}</a></h3>
+                            <p>{{ book.description }}</p>
+                            <a href="{% url 'cart:add' %}">
+                                <button class="plus btn btn-primary">
+                                    В корзину <i class="bi bi-cart-fill"></i>
+                                </button>
+                            </a>
+                        </div>
+                        <span class="clearfix borda"></span>
+                    </article>
+                {% endfor %}
+
+                {% for author in authors %}
+                    <article class="search-result row">
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="personPhoto">
+                                <a href="#" title="Lorem ipsum">
+                                    <img src="{{ author.image }}" alt="Lorem ipsum" class="personPhoto rounded-circle"/>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-2">
+                            <ul class="meta-search">
+                                <li><i class="bi bi-book"></i> <span><a href="{% url 'mainapp:books' %}">Книги</a></span></li>
+                                <li><i class="bi bi-justify"></i> <span>Категория</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+                            <h3><a href="#" title="Название" class="text-decoration-none">{{ author.full_name }}</a></h3>
+                            <p>{{ author.biography }}</p>
+                            <button class="plus btn btn-primary">
+                                Узнать больше <i class="bi bi-person"></i>
+                            </button>
+                        </div>
+                        <span class="clearfix borda"></span>
+                    </article>
+                {% endfor %}
+            </section>
+        {% endif %}
+    </div>
 {% endblock %}
 
 

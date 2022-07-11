@@ -1,0 +1,10 @@
+<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link{% if request.resolver_match.url_name == 'login' %} active{% else %} nav-inactive{% endif %}" id="tab-login" data-mdb-toggle="pill" href="{% url 'auth:login' %}" role="tab"
+           aria-controls="pills-login" aria-selected="true">Вход</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {% if request.resolver_match.url_name == 'register' %} active{% else %} nav-inactive{% endif %}" id="tab-register" data-mdb-toggle="pill" href="{% url 'auth:register' %}" role="tab"
+           aria-controls="pills-register" aria-selected="false">Регистрация</a>
+    </li>
+</ul>

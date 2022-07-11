@@ -1,0 +1,24 @@
+{% extends 'mainapp/base/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'cartapp/css/search.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    {% if products %}
+        <ol class="list-group list-group-numbered">
+            {% for product in products %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">{{ product.name }}</div>
+                        {{ product.description }}
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{ product.quantity }}</span>
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <label class="error_message">Карзина пуста</label>
+    {% endif %}
+{% endblock %}

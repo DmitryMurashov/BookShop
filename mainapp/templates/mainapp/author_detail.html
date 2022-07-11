@@ -1,6 +1,10 @@
 {% extends 'mainapp/base/base.html' %}
 {% load static %}
 
+{% block title %}
+    {{ author.full_name }}
+{% endblock %}
+
 {% block css %}
     <link rel="stylesheet" href="{% static 'mainapp/css/author_detail.css' %}">
 {% endblock %}

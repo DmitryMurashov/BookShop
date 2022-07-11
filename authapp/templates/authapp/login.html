@@ -1,0 +1,51 @@
+{% extends 'authapp/base/base.html' %}
+{% load static %}
+
+{% block title %}
+    Вход
+{% endblock %}
+
+{% block form %}
+    <!-- Email input -->
+    <div class="form-outline mb-4">
+        <label class="form-label" for="formEmailInput">Логин</label>
+        <input class="form-control" type="text" id="formEmailInput" placeholder="Ivan" name="login">
+        <div class="form-notch">
+            <div class="form-notch-leading" style="width: 9px;"></div>
+            <div class="form-notch-middle" style="width: 88px;"></div>
+            <div class="form-notch-trailing"></div>
+        </div>
+    </div>
+    <div class="form-outline mb-4">
+        <label class="form-label" for="formEmailInput">Email адресс</label>
+        <input class="form-control" type="email" id="formEmailInput" placeholder="example@gmail.com" name="email">
+        <div class="form-notch">
+            <div class="form-notch-leading" style="width: 9px;"></div>
+            <div class="form-notch-middle" style="width: 88px;"></div>
+            <div class="form-notch-trailing"></div>
+        </div>
+    </div>
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="form2Example2">Пароль</label>
+        <input type="password" id="form2Example2" class="form-control" placeholder="Пароль" name="password">
+        <div class="form-notch">
+            <div class="form-notch-leading" style="width: 9px;"></div>
+            <div class="form-notch-middle" style="width: 64px;"></div>
+            <div class="form-notch-trailing"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col d-flex justify-content-start">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="True" id="formRememberMe" name="remember_me" checked>
+                <label class="form-check-label " for="formRememberMe"> Запомнить меня </label>
+            </div>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <a href="#">Забыли пароль?</a>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Войти</button>
+{% endblock %}

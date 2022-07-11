@@ -1,0 +1,9 @@
+.carousel-item img {
+    height: 400px;
+}
+
+.test {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

@@ -1,0 +1,45 @@
+{% extends 'mainapp/base/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'authapp/css/base/base.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="bg-white">
+            <section class="w-100 p-4 d-flex justify-content-center">
+                <div class="border rounded-4 p-4">
+                    {% include 'authapp/base/include/navbar.html' %}
+                    <form style="width: 25rem;" method="post" action="{{ request.path }}">
+                        {% csrf_token %}
+
+                        {% block form %}
+                        {% endblock %}
+
+                        {% if next_page %}
+                            <input type="hidden" name="next_page" value="{{ next_page }}">
+                        {% endif %}
+                        <div class="text-center mt-3">
+                            <p>Или войдите с помощью:</p>
+                            <button type="button" class="btn btn-link oauth-btn">
+                                <i class="bi bi-google"></i>
+                            </button>
+                            <button type="button" class="btn btn-link oauth-btn">
+                                <i class="bi bi-facebook"></i>
+                            </button>
+                            <button type="button" class="btn btn-link oauth-btn">
+                                <i class="bi bi-github"></i>
+                            </button>
+                        </div>
+                        {% if error %}
+                            <div class="error_text mt-4 rounded-2">
+                                {{ error }}
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </section>
+        </div>
+    </section>
+{% endblock %}
