@@ -4,8 +4,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('mainapp.urls')),
+    path('admin/', admin.site.urls),
+    path('social/', include('social_django.urls', namespace='social')),
     path('cart/', include('cartapp.urls', namespace='cart')),
     path('auth/', include('authapp.urls', namespace='auth')),
 ]

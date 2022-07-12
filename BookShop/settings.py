@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'mainapp',
     'authapp',
     'cartapp',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -103,6 +105,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2'
+]
+
+with open(os.path.join(BASE_DIR, "secrets", "GoogleOAuth2.json"), "r") as GoogleOAuth2:
+    info = json.loads(GoogleOAuth2.read())['web']
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = info["client_id"]
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = info["client_secret"]
+
+SOCIAL_AUTH_SANITIZE_REDIRECTS = False
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

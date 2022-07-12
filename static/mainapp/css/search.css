@@ -83,15 +83,6 @@ hgroup h2.lead strong {
 }
 
 .object-image {
-    width: 240px;
-    height: 200px;
-    margin-right: auto;
-    margin-left: auto;
-}
-
-.personPhoto {
-    width: 200px;
-    height: 200px;
-    margin-right: auto;
-    margin-left: auto;
+    width: 10.5rem;
+    height: 10.5rem;
 }

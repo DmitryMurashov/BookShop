@@ -10,7 +10,6 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="container mt-4">
         <hgroup class="mb20">
             <button class="btn btn-primary mb-2">Фильтры</button>
@@ -22,56 +21,17 @@
             {% endif %}
         </hgroup>
         {% if results_quantity %}
-            <section class="col-xs-12 col-sm-6 col-md-12">
+            <section class="col-xs-12 col-sm-6 col-md-12 mb-3">
                 {% for book in books %}
-                    <article class="search-result row">
-                        <div class="col-sm-12 col-md-3">
-                            <a href="#" title="Lorem ipsum">
-                                <img src="{{ book.image }}" alt="Lorem ipsum" class="object-image rounded float-start"/></a>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <ul class="meta-search">
-                                <li><i class="bi bi-person"></i> <span><a href="{{ book.author.get_absolute_url }}">{{ book.author.full_name }}</a></span></li>
-                                <li><i class="bi bi-justify"></i> <span>{{ book.category.name }}</span></li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-                            <h3><a href="#" title="Название" class="text-decoration-none">{{ book.name }}</a></h3>
-                            <p>{{ book.description }}</p>
-                            <a href="{% url 'cart:add' %}">
-                                <button class="plus btn btn-primary">
-                                    В корзину <i class="bi bi-cart-fill"></i>
-                                </button>
-                            </a>
-                        </div>
-                        <span class="clearfix borda"></span>
-                    </article>
+                    {% include 'mainapp/include/search_book_list.html' %}
                 {% endfor %}
 
                 {% for author in authors %}
-                    <article class="search-result row">
-                        <div class="col-xs-12 col-sm-12 col-md-3">
-                            <div class="personPhoto">
-                                <a href="#" title="Lorem ipsum">
-                                    <img src="{{ author.image }}" alt="Lorem ipsum" class="personPhoto rounded-circle"/>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-2">
-                            <ul class="meta-search">
-                                <li><i class="bi bi-book"></i> <span><a href="{% url 'mainapp:books' %}">Книги</a></span></li>
-                                <li><i class="bi bi-justify"></i> <span>Категория</span></li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-                            <h3><a href="#" title="Название" class="text-decoration-none">{{ author.full_name }}</a></h3>
-                            <p>{{ author.biography }}</p>
-                            <button class="plus btn btn-primary">
-                                Узнать больше <i class="bi bi-person"></i>
-                            </button>
-                        </div>
-                        <span class="clearfix borda"></span>
-                    </article>
+                    {% include 'mainapp/include/search_author_list.html' %}
+                {% endfor %}
+
+                {% for category in categories %}
+                    {% include 'mainapp/include/search_category_list.html' %}
                 {% endfor %}
             </section>
         {% endif %}
@@ -80,5 +40,5 @@
 
 
 {% block js %}
-    <script src="{% static 'mainapp/js/search.js' %}"></script>
+    <script src="{% static 'utils/js/buy_buttons.js' %}"></script>
 {% endblock %}

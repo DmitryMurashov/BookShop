@@ -6,7 +6,7 @@ def search_for_all(query: str) -> (dict, int):
     data = {}
     quantity = 0
 
-    for key, group in groupby(filter(lambda obj: query in obj.name, chain(Author.objects.all(), Book.objects.all(), Category.objects.all())), key=lambda x: type(x)):
+    for key, group in groupby(filter(lambda obj: query.lower() in obj.name.lower(), chain(Author.objects.all(), Book.objects.all(), Category.objects.all())), key=lambda x: type(x)):
         group_items = list(group)
         data[key] = group_items
         quantity += len(group_items)

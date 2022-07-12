@@ -10,5 +10,6 @@ urlpatterns = [
     path('books/book/<slug:slug>/', mainapp.BookDetailView.as_view(), name="book_detail"),
     path('authors/', mainapp.AuthorsView.as_view(), name="authors"),
     path('authors/author/<slug:slug>/', mainapp.AuthorDetailView.as_view(), name="author_detail"),
+    # path('reviews/', mainapp.AuthorDetailView.as_view(), name="author_detail"),
     path('about/', mainapp.AboutView.as_view(), name='about'),
 ]

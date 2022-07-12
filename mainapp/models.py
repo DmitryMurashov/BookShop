@@ -26,7 +26,11 @@ class Book(models.Model):
     @property
     def rating(self) -> int:
         reviews = self.book_reviews.all()
-        rating = round(len(reviews) / sum(review.stars for review in reviews))
+        print(reviews)
+        try:
+            rating = round(sum(review.stars for review in reviews) / len(reviews))
+        except ZeroDivisionError:
+            return 0
         return rating
 
     @property
@@ -69,6 +73,8 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
+    image = models.ImageField()
+    description = models.TextField(null=True)
     slug = models.SlugField(max_length=50)
 
     def set_slug(self) -> None:

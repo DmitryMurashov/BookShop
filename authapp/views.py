@@ -27,7 +27,7 @@ class LoginView(View):
             self.request.session.set_expiry(0)  # TODO: В Opera не работает
             self.request.session.modified = True
         if user:
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             if next_page:
                 return HttpResponseRedirect(next_page)
             return HttpResponseRedirect(reverse('mainapp:main'))
@@ -61,7 +61,7 @@ class RegisterView(View):
             if 'UNIQUE constraint failed' in str(error):
                 return self.get(request, error="Пользователь уже существует")
         if user is not None:
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             auth_service.create_user_dependencies(user)
             if next_page:
                 return HttpResponseRedirect(next_page)

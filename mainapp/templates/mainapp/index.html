@@ -56,9 +56,15 @@
                             <img class="card-img-top" src="{{ book.image }}" alt="..."/>
                             <!-- Product details-->
                             <div class="card-body p-4">
+
                                 <div class="text-center">
                                     <!-- Product name-->
                                     <h5 class="fw-bolder">{{ book.name }}</h5>
+                                <div class="d-flex justify-content-center small text-warning">
+                                    {% for _ in book.rating_as_range %}
+                                        <div class="bi-star-fill"></div>
+                                    {% endfor %}
+                                </div>
                                     <!-- Product price-->
                                     ₽{{ book.price }}
                                 </div>
@@ -66,7 +72,7 @@
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
-                                    <a class="btn btn-outline-dark mt-auto" href="{% url 'cart:add' %}">В корзину <i class="bi bi-cart-fill"></i></a>
+                                    <button class="btn btn-outline-dark mt-auto" value="{{ book.slug }}" type="button" name="buyButton">В корзину <i class="bi bi-cart-fill"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -75,4 +81,8 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'utils/js/buy_buttons.js' %}"></script>
 {% endblock %}

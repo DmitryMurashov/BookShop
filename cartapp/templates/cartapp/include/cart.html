@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-8 cart" id="cart_products">
+        <div class="title">
+            <div class="row">
+                <div class="col"><h4><b>Корзина</b></h4></div>
+                <div class="col align-self-center text-right text-muted">{{ cart.items_quantity }} предметов(а)</div>
+            </div>
+        </div>
+        <div class="row border-top border-bottom">
+            {% for book_product in cart.book_products.all %}
+                {% with book=book_product.product %}
+                    <div class="row main align-items-center">
+                        <div class="col-2">
+                            <img class="img-fluid" src="{{ book.image }}" alt="{{ book.name }}"></div>
+                        <div class="col">
+                            <div class="row text-muted">{{ book.name }}</div>
+                            <div class="row">{{ book.author.full_name }}</div>
+                        </div>
+                        <div class="col">
+                            <label>
+                                <input type="number" value="{{ book_product.quantity }}" min="1" class="w-50 text-center rounded-3" name="{{ book.slug }}">
+                            </label>
+                        </div>
+                        <div class="col">
+                            ₽ {{ book_product.full_price }} <button class="ms-3 btn btn-primary rounded-circle" type="button" name="delete_product" value="{{ book.slug }}">&#10005;</button>
+                        </div>
+                    </div>
+                {% endwith %}
+                {% empty %}
+                    <div class="d-flex justify-content-center">
+                        <span>Корзина пуста</span>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-4 summary">
+        <div><h5><b>Покупка</b></h5></div>
+        <hr>
+        <div class="row">
+            <div class="col" style="padding-left:0;">{{ cart.items_quantity }} предметов(а)</div>
+            <div class="col text-right">₽ {{ cart.total_cost }} </div>
+        </div>
+        <form>
+            <p>Доставка</p>
+            <label>
+                <select class="form-select">
+                    <option class="text-muted">Standard-Delivery- ₽5.00</option>
+                    <option class="text-muted">Standard-Delivery- ₽5.00</option>
+                </select>
+            </label>
+            <label for="code">Подарочный код</label>
+            <input class="form-control mt-3" id="code" placeholder="Enter your code">
+        </form>
+        <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+            <div class="col">Итог</div>
+            <div class="col text-right">₽ {{ cart.total_cost }}</div>
+        </div>
+        {% if cart.items_quantity %}
+            <button class="btn btn-primary w-100 bottom-0 mt-3">Купить</button>
+        {% endif %}
+    </div>
+</div>

@@ -2,23 +2,18 @@
 {% load static %}
 
 {% block css %}
-    <link href="{% static 'cartapp/css/search.css' %}" rel="stylesheet" />
+    <link href="{% static 'cartapp/css/index.css' %}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
-    {% if products %}
-        <ol class="list-group list-group-numbered">
-            {% for product in products %}
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">{{ product.name }}</div>
-                        {{ product.description }}
-                    </div>
-                    <span class="badge bg-primary rounded-pill">{{ product.quantity }}</span>
-                </li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        <label class="error_message">Карзина пуста</label>
-    {% endif %}
+    <div class="card mt-4 mb-4">
+        <div id="CartWrapper">
+            {% include 'cartapp/include/cart.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'cartapp/js/index.js' %}"></script>
 {% endblock %}

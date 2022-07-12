@@ -1,0 +1,24 @@
+<article class="search-result row">
+    <div class="col-xs-12 col-sm-12 col-md-3">
+        <div class="d-flex justify-content-center">
+            <a href="#" title="Lorem ipsum">
+                <img src="{{ author.image }}" alt="Lorem ipsum" class="object-image rounded-circle"/>
+            </a>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-2">
+        <ul class="meta-search">
+            <li><i class="bi bi-palette"></i> <span>Автор</span></li>
+            <li><i class="bi bi-book"></i> <span><a href="{% url 'mainapp:books' %}">Книги</a></span></li>
+            <li><i class="bi bi-justify"></i> <span>{{ author.category }}</span></li>
+        </ul>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+        <h3><a href="#" title="Название" class="text-decoration-none">{{ author.full_name }}</a></h3>
+        <p>{{ author.biography }}</p>
+        <button class="plus btn btn-primary">
+            Узнать больше <i class="bi bi-person"></i>
+        </button>
+    </div>
+    <span class="clearfix borda"></span>
+</article>

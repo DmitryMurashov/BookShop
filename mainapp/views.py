@@ -9,8 +9,8 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         books = Book.objects.all()
-        context['special_books'] = list(enumerate(books))
-        context['books'] = books
+        context['special_books'] = list(enumerate(books[:4]))
+        context['books'] = books[:5]
         return context
 
 

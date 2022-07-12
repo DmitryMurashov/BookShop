@@ -22,9 +22,9 @@
                         {% endif %}
                         <div class="text-center mt-3">
                             <p>Или войдите с помощью:</p>
-                            <button type="button" class="btn btn-link oauth-btn">
+                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-link oauth-btn">
                                 <i class="bi bi-google"></i>
-                            </button>
+                            </a>
                             <button type="button" class="btn btn-link oauth-btn">
                                 <i class="bi bi-facebook"></i>
                             </button>
