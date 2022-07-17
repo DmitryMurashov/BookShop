@@ -26,7 +26,6 @@ class Book(models.Model):
     @property
     def rating(self) -> int:
         reviews = self.book_reviews.all()
-        print(reviews)
         try:
             rating = round(sum(review.stars for review in reviews) / len(reviews))
         except ZeroDivisionError:
@@ -70,6 +69,10 @@ class Author(models.Model):
     def full_name(self) -> str:
         return f"{self.name} {self.last_name}"
 
+    @property
+    def books_page_url(self) -> str:
+        return reverse('mainapp:search') + f"?type=book&author={self.slug}"
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -80,9 +83,24 @@ class Category(models.Model):
     def set_slug(self) -> None:
         self.slug = f"Category{self.id}"
 
+    @property
+    def books_page_url(self) -> str:
+        return reverse('mainapp:search') + f"?type=book&category={self.slug}"
+
+    @property
+    def authors_page_url(self) -> str:
+        return reverse('mainapp:search') + f"?type=author&category={self.slug}"
+
 
 class Review(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_reviews")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="book_reviews")
     content = models.TextField(max_length=1000)
     stars = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)])
+
+
+class Profile(models.Model):
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='profile')
+    age = models.IntegerField()
+    phone = models.BigIntegerField()
+    image = models.ImageField()

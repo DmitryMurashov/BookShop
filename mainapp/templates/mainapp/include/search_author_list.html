@@ -9,8 +9,8 @@
     <div class="col-xs-12 col-sm-12 col-md-2">
         <ul class="meta-search">
             <li><i class="bi bi-palette"></i> <span>Автор</span></li>
-            <li><i class="bi bi-book"></i> <span><a href="{% url 'mainapp:books' %}">Книги</a></span></li>
-            <li><i class="bi bi-justify"></i> <span>{{ author.category }}</span></li>
+            <li><i class="bi bi-book"></i> <span><a href="{{ author.books_page_url }}">Книги</a></span></li>
+            <li><i class="bi bi-justify"></i> <span>{{ author.category.name }}</span></li>
         </ul>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7 excerpet">

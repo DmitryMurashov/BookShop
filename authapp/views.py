@@ -76,7 +76,3 @@ class LogoutView(View):
                 return HttpResponseRedirect(next_page)
             logout(request)
         return HttpResponseRedirect(reverse('mainapp:main'))
-
-
-class ProfileView(TemplateView):
-    template_name = 'authapp/profile.html'

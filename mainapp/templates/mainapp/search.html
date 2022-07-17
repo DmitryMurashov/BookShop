@@ -12,10 +12,23 @@
 {% block content %}
     <div class="container mt-4">
         <hgroup class="mb20">
-            <button class="btn btn-primary mb-2">Фильтры</button>
+            <button class="btn btn-primary mb-2" data-bs-toggle="collapse" data-bs-target="#filters">
+                Фильтры
+            </button>
+            <div class="collapse mb-4" id="filters">
+                <div class="card card-body">
+                    <label for="flexRadioDefault2">Тип</label>
+                    <div class="d-inline">
+                        <input class="form-check-input ms-2" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked> Автор
+                        <input class="form-check-input ms-2" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked> Книга
+                        <input class="form-check-input ms-2" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked> Жанр
+                    </div>
+                </div>
+            </div>
             <h1>Резутитаты поиска</h1>
             {% if results_quantity %}
-                <h2 class="lead">Результаты по запросу <strong>"{{ query }}" ({{ results_quantity }})</strong></h2>
+                <h2 class="lead">Результаты поиска{% if query %} по запросу
+                    <strong>"{{ query }}" ({{ results_quantity }})</strong>{% endif %}</h2>
             {% else %}
                 <h2 class="lead">По запросу <strong> "{{ query }}"</strong> ничего не найдено</h2>
             {% endif %}
