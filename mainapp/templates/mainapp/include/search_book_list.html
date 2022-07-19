@@ -12,7 +12,7 @@
         </ul>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-        <h3><a href="#" title="Название" class="text-decoration-none">{{ book.name }}</a></h3>
+        <h3><a href="{% url 'mainapp:book_detail' slug=book.slug %}" title="Название" class="text-decoration-none">{{ book.name }}</a></h3>
         <p>{{ book.description }}</p>
         <button class="plus btn btn-primary" name="buyButton" value="{{ book.slug }}">
             В корзину <i class="bi bi-cart-fill"></i>

@@ -1,6 +1,10 @@
 {% extends 'mainapp/base/base.html' %}
 {% load static %}
 
+{% block title %}
+    Профиль {{ user.get_full_name }}
+{% endblock %}
+
 {% block css %}
     <link rel="stylesheet" href="{% static 'profile.html' %}">
 {% endblock %}
@@ -19,6 +23,7 @@
                                     <h4>{{ user.get_full_name }}</h4>
                                     <p class="text-secondary mb-1">Зарегистрирован
                                         с {{ user.date_joined|date:"M d, Y" }}</p>
+                                    <a href="{% url 'auth:logout' %}" class="btn btn-danger mt-2">Выйти</a>
                                 </div>
                             </div>
                         </div>

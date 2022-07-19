@@ -14,11 +14,13 @@
         </ul>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-        <h3><a href="#" title="Название" class="text-decoration-none">{{ author.full_name }}</a></h3>
+        <h3><a href="{% url 'mainapp:author_detail' slug=author.slug %}" title="Название" class="text-decoration-none">{{ author.full_name }}</a></h3>
         <p>{{ author.biography }}</p>
-        <button class="plus btn btn-primary">
-            Узнать больше <i class="bi bi-person"></i>
-        </button>
+        <a href="{% url 'mainapp:author_detail' slug=author.slug %}">
+            <button class="plus btn btn-primary">
+                Узнать больше <i class="bi bi-person"></i>
+            </button>
+        </a>
     </div>
     <span class="clearfix borda"></span>
 </article>

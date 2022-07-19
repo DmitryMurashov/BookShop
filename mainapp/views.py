@@ -1,6 +1,6 @@
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, TemplateView
 from mainapp.models import Book, Author, Category
-from mainapp.services import search_service
+from mainapp.services import search_service, book_service, author_service
 from django.views import View
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -28,43 +28,44 @@ class SearchView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SearchView, self).get_context_data(**kwargs)
         query = self.request.GET.get('query', "")
+        search_for = self.request.GET.get("type")
         context['query'] = query
         context['results_quantity'] = 0
-        search_result, _ = search_service.search_for_all(query)
-        search_for = self.request.GET.get("type")
+        if query == "" and not search_for:
+            return context
+        search_result, quantity = search_service.search_for_all(query)
         if search_for == "author":
             category = self.request.GET.get('category')
-            context['authors'] = tuple(filter(
-                lambda x: (not category or x.category.slug == category), search_result.get(Author)
-            ))
-
-        elif search_for == "book":
-            author = self.request.GET.get("author")
-            category = self.request.GET.get("category")
-            context['books'] = tuple(filter(
-                lambda x: (not author or x.author.slug == author) and (not category or x.category.slug == category),
-                search_result.get(Book)))
-        elif search_for == 'category':
-            context['category'] = search_result.get(Category)
-        else:
-            context['authors'] = search_result.get(Author)
-            context['books'] = search_result.get(Book)
-            context['categories'] = search_result.get(Category)
-
-        if authors := context.get("authors"):
+            authors = search_service.filter_authors(search_result, category=category)
+            context['authors'] = authors
             context['results_quantity'] += len(authors)
-        if books := context.get("books"):
+        elif search_for == "book":
+            author, category = self.request.GET.get("author"), self.request.GET.get("category")
+            books = search_service.filter_books(search_result, author=author, category=category)
+            context['books'] = books
             context['results_quantity'] += len(books)
-        if categories := context.get("categories"):
+        elif search_for == 'category':
+            categories = search_result.get(Category)
+            context['category'] = categories
             context['results_quantity'] += len(categories)
-
+        else:
+            authors = search_result.get(Author)
+            books = search_result.get(Book)
+            categories = search_result.get(Category)
+            context['authors'] = authors
+            context['books'] = books
+            context['categories'] = categories
+            context['results_quantity'] = quantity
         return context
 
 
-class BooksView(ListView):
-    model = Book
+class BooksView(TemplateView):
     template_name = "mainapp/books.html"
-    context_object_name = "books"
+
+    def get_context_data(self, **kwargs):
+        context = super(BooksView, self).get_context_data(**kwargs)
+        context['books'] = book_service.get_most_popular_books()
+        return context
 
 
 class BookDetailView(DetailView):
@@ -74,14 +75,12 @@ class BookDetailView(DetailView):
     slug_url_kwarg = "slug"
 
 
-class AuthorsView(ListView):
-    model = Author
-    context_object_name = "authors"
+class AuthorsView(TemplateView):
     template_name = "mainapp/authors.html"
 
     def get_context_data(self, **kwargs):
         context = super(AuthorsView, self).get_context_data(**kwargs)
-        context["page_title"] = "Авторы"
+        context['authors'] = author_service.get_most_popular_authors()
         return context
 
 

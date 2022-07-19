@@ -13,9 +13,9 @@ def search_for_all(query: str) -> (dict, int):
     return data, quantity
 
 
-def search_for_authors():
-    pass
+def filter_authors(search_result: dict, category: str = None):
+    return tuple(filter(lambda x: (not category or x.category.slug == category), search_result.get(Author)))
 
 
-def search_for_books():
-    pass
+def filter_books(search_result: dict, author: str = None, category: str = None) -> tuple:
+    return tuple(filter(lambda x: (not author or x.author.slug == author) and (not category or x.category.slug == category), search_result.get(Book)))

@@ -36,7 +36,7 @@ class Book(models.Model):
     def rating_as_range(self):
         return range(self.rating)
 
-    def get_reviews(self, filter_: str) -> list:
+    def get_reviews(self, filter_: str = None) -> list:
         reviews = self.book_reviews.all()
         if filter_ == "positive":
             reviews = sorted(reviews, key=lambda x: x.stars)
@@ -73,6 +73,27 @@ class Author(models.Model):
     def books_page_url(self) -> str:
         return reverse('mainapp:search') + f"?type=book&author={self.slug}"
 
+    @property
+    def rating(self) -> int:
+        reviews = self.author_reviews.all()
+        try:
+            rating = round(sum(review.stars for review in reviews) / len(reviews))
+        except ZeroDivisionError:
+            return 0
+        return rating
+
+    @property
+    def rating_as_range(self):
+        return range(self.rating)
+
+    def get_reviews(self, filter_: str = None) -> list:
+        reviews = self.author_reviews.all()
+        if filter_ == "positive":
+            reviews = sorted(reviews, key=lambda x: x.stars)
+        elif filter_ == "negative":
+            reviews = sorted(reviews, key=lambda x: x.stars, reverse=True)
+        return list(reviews)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -92,9 +113,16 @@ class Category(models.Model):
         return reverse('mainapp:search') + f"?type=author&category={self.slug}"
 
 
-class Review(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_reviews")
+class BookReview(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_book_reviews")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="book_reviews")
+    content = models.TextField(max_length=1000)
+    stars = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)])
+
+
+class AuthorReview(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_author_reviews")
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="author_reviews")
     content = models.TextField(max_length=1000)
     stars = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)])
 

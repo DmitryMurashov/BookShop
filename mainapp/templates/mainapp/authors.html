@@ -1,17 +1,70 @@
 {% extends 'mainapp/base/base.html' %}
+{% load static %}
 
 {% block title %}
-    Авторы
+    Популярные авторы
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/books.css' %}">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <ul>
-        {% for author in authors %}
-            <li>
-                <a href="{{ author.get_absolute_url }}">{{ author.full_name }}</a>
-            </li>
-            {% empty %}
-                <li>Авторы не найдены</li>
-        {% endfor %}
-    </ul>
+    <section>
+        <div class="container py-5">
+            <div class="d-flex justify-content-center mb-3">
+                <h1>Популярные авторы</h1>
+            </div>
+            <div class="row justify-content-center mb-3">
+                {% for author in authors %}
+                    <div class="col-md-12 col-xl-10 mb-2 mt-2">
+                        <div class="card shadow-0 border rounded-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                                        <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                                            <img src="{{ author.image }}" class="w-100" alt="{{ author.full_name }}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <h5><a href="{% url 'mainapp:book_detail' slug=author.slug %}"
+                                               class="text-decoration-none">{{ author.full_name }}</a></h5>
+                                        <div class="d-flex flex-row">
+                                            <div class="text-danger mb-1 me-2">
+                                                {% for _ in author.rating_as_range %}
+                                                    <i class="fa fa-star"></i>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div style="color: #898989">
+                                            <span>{{ author.category.name }}</span>
+                                        </div>
+                                        <p class="text-truncate mb-4 mb-md-0">
+                                            {{ author.biography }}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                                        <div class="d-flex flex-row align-items-center mb-1">
+
+                                        </div>
+
+                                        <div class="d-flex flex-column mt-4">
+                                            <a href="{% url 'mainapp:author_detail' slug=author.slug %}" class="btn btn-primary btn-sm mt-2" name="buyButton" value="{{ author.slug }}">
+                                                Узнать больше <i class="bi bi-person"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'utils/js/buy_buttons.js' %}"></script>
 {% endblock %}

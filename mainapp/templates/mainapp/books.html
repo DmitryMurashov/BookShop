@@ -1,17 +1,73 @@
 {% extends 'mainapp/base/base.html' %}
+{% load static %}
 
 {% block title %}
-    Книги
+    Популярные книги
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'mainapp/css/books.css' %}">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <ul>
-        {% for book in books %}
-            <li>
-                <a href="{{ book.get_absolute_url }}">{{ book.name }} - {{ book.author.full_name }}</a>
-            </li>
-            {% empty %}
-                <li>Книги не найдены</li>
-        {% endfor %}
-    </ul>
+    <section>
+        <div class="container py-5">
+            <div class="d-flex justify-content-center mb-3">
+                <h1>Сейчас популярно</h1>
+            </div>
+            <div class="row justify-content-center mb-3">
+                {% for book in books %}
+                    <div class="col-md-12 col-xl-10 mb-2 mt-2">
+                        <div class="card shadow-0 border rounded-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                                        <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                                            <img src="{{ book.image }}" class="w-100" alt="{{ book.name }}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <h5><a href="{% url 'mainapp:book_detail' slug=book.slug %}"
+                                               class="text-decoration-none">{{ book.name }}</a></h5>
+                                        <div class="d-flex flex-row">
+                                            <div class="text-danger mb-1 me-2">
+                                                {% for _ in book.rating_as_range %}
+                                                    <i class="fa fa-star"></i>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div style="color: #898989">
+                                            <span>{{ book.category.name }}</span>
+                                        </div>
+                                        <p class="text-truncate mb-4 mb-md-0">
+                                            {{ book.description }}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                                        <div class="d-flex flex-row align-items-center mb-1">
+                                            <h4 class="mb-1 me-1">{{ book.price }}</h4>
+                                        </div>
+
+                                        <div class="d-flex flex-column mt-4">
+                                            <a href="{% url 'mainapp:book_detail' slug=book.slug %}"
+                                               class="btn btn-outline-primary btn-sm" type="button">Подробнее</a>
+                                            <button class="btn btn-primary btn-sm mt-2" type="button" name="buyButton"
+                                                    value="{{ book.slug }}">
+                                                Добавить в корзину <i class="bi bi-cart-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'utils/js/buy_buttons.js' %}"></script>
 {% endblock %}
