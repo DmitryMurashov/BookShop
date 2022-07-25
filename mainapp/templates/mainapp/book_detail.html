@@ -7,24 +7,142 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'mainapp/css/book_detail.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <p>{{ book.name }}</p>
-    <p>Жанр: {{ book.category.name }}</p>
-    <p>
-        Автор: <a href="{{ book.author.get_absolute_url }}">{{ book.author.full_name }}</a>
-    </p>
-    <img src="{{ book.image }}" alt="{{ book.name }}" class="book_image">
-    <p>Цена: {{ book.price }}</p>
-    <label>Описание:</label>
-    <p>{{ book.description }}</p>
-    <button id="show_demo">Показать отрывок</button>
-    <div id="demo_text">
-        {{ book.demo }}
+    <div class="modal fade" id="ReviewModel" tabindex="-1" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'mainapp:create_review' slug=book.slug %}" method="post" id="ReviewForm">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center" id="exampleModalLabel">Оставить отзыв</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-center rounded-2 w-100" style="background-color: #e9e9e9">
+                            <div class="p-2">
+                                <div class="row border-bottom p-2">
+                                    <div class="d-flex justify-content-center">
+                                        <span>{{ book.name }}</span>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="d-flex justify-content-center" id="rating-ability-wrapper">
+                                        <input type="hidden" id="selected_rating" name="selected_rating" value="1"
+                                               required="required">
+                                        <input type="hidden" id="book_slug" name="book_slug" value="{{ book.slug }}"
+                                               required="required">
+
+                                        <button type="button" class="btn-rating btn btn-warning btn-lg" data-attr="1"
+                                                id="rating-star-1">
+                                            <i class="bi bi-star-fill text-gray" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn-rating btn btn-default btn-lg ms-1"
+                                                data-attr="2" id="rating-star-2">
+                                            <i class="bi bi-star-fill text-gray" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn-rating btn btn-default btn-lg ms-1"
+                                                data-attr="3" id="rating-star-3">
+                                            <i class="bi bi-star-fill text-gray" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn-rating btn btn-default btn-lg ms-1"
+                                                data-attr="4" id="rating-star-4">
+                                            <i class="bi bi-star-fill text-gray" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn-rating btn btn-default btn-lg ms-1"
+                                                data-attr="5" id="rating-star-5">
+                                            <i class="bi bi-star-fill text-gray" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label for="ReviewContent" class="fw-bold">
+                                Комментарий
+                            </label>
+                            <textarea name="review_content" id="ReviewContent" rows="10"
+                                      class="w-100 rounded-3 mt-2 form-control" maxlength="999"
+                                      placeholder="Комментарий"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="col-10 btn btn-primary w-100">Отправить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card shadow mb-5">
+            <div class="container-fliud">
+                <div class="border border-2 rounded-2">
+                    <div class="col">
+                        <h3 class="text-center">{{ book.name }}</h3>
+                        <h5 class="text-center">
+                            <a href="{{ book.author.get_absolute_url }}"
+                               class="text-decoration-none text-black">{{ book.author.full_name }}</a>
+                        </h5>
+                    </div>
+                </div>
+                <div class="border border-2 rounded-2 mt-2">
+                    <div class="row-cols-2 d-flex p-2">
+                        <div class="col pe-2 border-end">
+                            <img src="{{ book.image }}" alt="{{ book.name }}" class="h-100 w-100 rounded-2">
+                        </div>
+                        <div class="col ps-2">
+                            <p class="p-2">
+                                {{ book.description }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <button class="btn btn-primary w-100" name="buyButton" value="{{ book.slug }}">Добавить в
+                            корзину
+                        </button>
+                    </div>
+                </div>
+
+                {# Reviews #}
+
+                <div class="row-cols-1 mt-3 border border-2 rounded-2">
+                    <div class="p-2">
+                        {% if user_review %}
+                            {% with review=user_review %}
+                                <h3 class="text-center">Ваш отзыв</h3>
+                                {% include "mainapp/include/book_detail/review.html" %}
+                                <button class="btn btn-primary w-100 mt-2" value="{{ review.id }}" id="EditReviewContentButton">
+                                    Изменить отзыв
+                                </button>
+                            {% endwith %}
+                        {% else %}
+                            <h3 class="text-center">Уже купили эту книгу?</h3>
+                            <button class="btn btn-primary w-100" id="ReviewButton">
+                                Поделитесь своим мнением с другими!
+                            </button>
+                        {% endif %}
+                    </div>
+
+                    <div class="row-cols-1 border-top p-2">
+                        <h3 class="text-center">Все отзывы</h3>
+                        {% for review in reviews %}
+                            {% if review.customer.user != user %}
+                                {% include "mainapp/include/book_detail/review.html" %}
+                            {% endif %}
+                        {% empty %}
+                            <h4 class="text-center">У книги пока нет отзывов</h4>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block js %}
     <script src="{% static 'mainapp/js/book_detail.js' %}"></script>
+    <script src="{% static 'utils/js/buy_buttons.js' %}"></script>
 {% endblock %}

@@ -1,13 +1,10 @@
 from django.views import View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth import login, logout
 from django.shortcuts import render
 from authapp.services import auth_service
-from django.db.utils import IntegrityError
-from django.views.generic import TemplateView
 
-User = get_user_model()
 
 
 class LoginView(View):
@@ -46,23 +43,14 @@ class RegisterView(View):
         return render(request, 'authapp/register.html', context=context)
 
     def post(self, request):
-        email = request.POST.get('email')
-        username = request.POST.get('login')
-        password = request.POST.get('password')
-        name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        next_page = request.POST.get('next_page')
-        user = None
         try:
-            user = User(email=email, username=username, first_name=name, last_name=last_name)
-            user.set_password(password)
-            user.save()
-        except IntegrityError as error:
-            if 'UNIQUE constraint failed' in str(error):
-                return self.get(request, error="Пользователь уже существует")
+            user = auth_service.create_user_by_post_request(request)
+        except auth_service.UserAlreadyExists:
+            return self.get(request, error="Пользователь уже существует")
+        next_page = request.POST.get('next_page')
+
         if user is not None:
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            auth_service.create_user_dependencies(user)
             if next_page:
                 return HttpResponseRedirect(next_page)
             return HttpResponseRedirect(reverse('mainapp:main'))

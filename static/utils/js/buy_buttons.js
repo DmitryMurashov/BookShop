@@ -23,6 +23,5 @@ buy_buttons.forEach(function (button) {
                 });
             }
         });
-
     })
 })

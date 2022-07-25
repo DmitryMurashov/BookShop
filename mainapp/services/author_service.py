@@ -6,4 +6,4 @@ def get_author(slug):
 
 
 def get_most_popular_authors():
-    return list(sorted(Author.objects.all(), key=lambda x: len(x.get_reviews())))[:10]
+    return Author.objects.all()[:10]

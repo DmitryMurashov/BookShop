@@ -84,5 +84,9 @@ hgroup h2.lead strong {
 
 .object-image {
     width: 10.5rem;
+}
+
+.author-image {
+    width: 10.5rem;
     height: 10.5rem;
 }

@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, TemplateView
 from mainapp.models import Book, Author, Category
-from mainapp.services import search_service, book_service, author_service
+from mainapp.services import search_service, book_service, author_service, review_service
 from django.views import View
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -68,11 +68,49 @@ class BooksView(TemplateView):
         return context
 
 
-class BookDetailView(DetailView):
-    model = Book
-    context_object_name = "book"
-    template_name = "mainapp/book_detail.html"
-    slug_url_kwarg = "slug"
+class BookDetailView(View):
+    def get(self, request, *args, **kwargs):
+        book = book_service.get_book(kwargs.get("slug"))
+        context = {
+            "book": book,
+            "reviews": book.get_reviews(positive_filter=True)[:10],
+            "user_review": review_service.get_user_review(request.user.get_customer(), book),
+        }
+        return render(request, "mainapp/book_detail.html", context=context)
+
+
+class CreateReviewView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('mainapp:main')))
+
+    def post(self, request, *args, **kwargs):
+        review_service.create_review(request)
+        return HttpResponseRedirect(request.META.get("PATH_INFO"))
+
+
+class EditReviewView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('mainapp:main')))
+
+    def post(self, request, *args, **kwargs):
+        review_service.edit_review(request)
+        return HttpResponseRedirect(request.META.get("PATH_INFO"))
+
+
+class DeleteReviewView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('mainapp:main')))
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+
+class RateViewView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('mainapp:main')))
+
+    def post(self, request, *args, **kwargs):
+        pass
 
 
 class AuthorsView(TemplateView):
@@ -90,31 +128,24 @@ class AuthorDetailView(DetailView):
     template_name = "mainapp/author_detail.html"
     slug_url_kwarg = "slug"
 
-    def get_context_data(self, **kwargs):
-        context = super(AuthorDetailView, self).get_context_data(**kwargs)
-        author = self.get_object()
-        context["books"] = author.books
-        context["page_title"] = author.full_name
-        return context
-
 
 class ProfileView(View):
     def get(self, request, *args, **kwargs):
         if self.request.GET.get("action") == 'edit':
-            return render(request, "mainapp/include/edit_profile_info.html", context={"profile": self.request.user.customer.profile})
-        return render(request, "mainapp/profile.html", context={"profile": self.request.user.customer.profile})
+            return render(request, "mainapp/include/profile/edit_profile_info.html", context={"customer": request.user.get_customer(request.user)})
+        return render(request, "mainapp/profile.html", context={"customer": request.user.get_customer(request.user)})
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        profile = user.customer.profile
+        customer = user.customer
 
         user.first_name = request.POST.get('first_name')
         user.last_name = request.POST.get('last_name')
         user.email = request.POST.get('email')
 
-        profile.phone = request.POST.get('phone')
-        profile.age = request.POST.get('age')
+        customer.phone = request.POST.get('phone')
+        customer.age = request.POST.get('age')
 
         user.save()
-        profile.save()
+        customer.save()
         return HttpResponseRedirect(reverse('mainapp:profile'))

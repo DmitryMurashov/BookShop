@@ -32,8 +32,8 @@
                                                class="text-decoration-none">{{ author.full_name }}</a></h5>
                                         <div class="d-flex flex-row">
                                             <div class="text-danger mb-1 me-2">
-                                                {% for _ in author.rating_as_range %}
-                                                    <i class="fa fa-star"></i>
+                                                {% for status_class in author.rating_as_stars %}
+                                                    <span class="{{ status_class }}"></span>
                                                 {% endfor %}
                                             </div>
                                         </div>

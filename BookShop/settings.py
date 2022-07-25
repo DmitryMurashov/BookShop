@@ -110,6 +110,8 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2'
 ]
 
+AUTH_USER_MODEL = 'authapp.ShopUser'
+
 with open(os.path.join(BASE_DIR, "secrets", "GoogleOAuth2.json"), "r") as GoogleOAuth2:
     info = json.loads(GoogleOAuth2.read())['web']
     SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = info["client_id"]

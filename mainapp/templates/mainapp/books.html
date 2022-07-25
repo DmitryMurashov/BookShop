@@ -31,9 +31,9 @@
                                         <h5><a href="{% url 'mainapp:book_detail' slug=book.slug %}"
                                                class="text-decoration-none">{{ book.name }}</a></h5>
                                         <div class="d-flex flex-row">
-                                            <div class="text-danger mb-1 me-2">
-                                                {% for _ in book.rating_as_range %}
-                                                    <i class="fa fa-star"></i>
+                                            <div class="text-warning mb-1 me-2">
+                                                {% for status_class in book.rating_as_stars %}
+                                                    <span class="{{ status_class }}"></span>
                                                 {% endfor %}
                                             </div>
                                         </div>
