@@ -133,7 +133,7 @@ class ProfileView(View):
     def get(self, request, *args, **kwargs):
         if self.request.GET.get("action") == 'edit':
             return render(request, "mainapp/include/profile/edit_profile_info.html", context={"customer": request.user.get_customer(request.user)})
-        return render(request, "mainapp/profile.html", context={"customer": request.user.get_customer(request.user)})
+        return render(request, "mainapp/profile.html", context={"customer": request.user.get_customer()})
 
     def post(self, request, *args, **kwargs):
         user = request.user
